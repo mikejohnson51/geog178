@@ -2,4 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-section_slides/ppt.DS_Store
+section_slides/ppt
+.DS_Store
