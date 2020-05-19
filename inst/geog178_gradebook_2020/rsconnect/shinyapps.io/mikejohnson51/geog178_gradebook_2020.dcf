@@ -5,8 +5,9 @@ account: mikejohnson51
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2322094
-bundleId: 3164790
+bundleId: 3167222
 url: https://mikejohnson51.shinyapps.io/geog178_gradebook_2020/
-when: 1589861259.61216
+when: 1589909627.91547
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: data/~$grades.xlsx

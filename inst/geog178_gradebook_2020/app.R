@@ -20,13 +20,11 @@ process = function(lab, perm){
     d = data.frame(t(dplyr::filter(xx, Perm %in% c("total", perm))), stringsAsFactors = FALSE)
     if(ncol(d) == 2){
         names(d) = c("Maximum", d[1,2])
-        d = d[!rownames(d) %in% c('Name', "Comment", "Perm"),]
-        question  = rownames(d)
         comment = d[rownames(d) == 'Comment', 2 ]
-        
         if(length(comment) == 0) { comment = NA}
         if(is.na(comment) | length(comment) == 0){ comment = ""}
-        
+        d = d[!rownames(d) %in% c('Name', "Comment", "Perm"),]
+        question  = rownames(d)
         d = d[, c(2,1)]
         d = mutate_all(d, as.numeric)
         d = mutate_all(d, round, 2)
@@ -69,19 +67,24 @@ server <- function(input, output) {
         
         d  = process(input$lab, input$perm)
         c2 =  process(input$lab, "class")
+        tmp = names(d$d)[1]
         
     ggplot() + 
-        geom_col(data = c2$d, aes(x = rownames(c2$d), y = c2$d[,1]), fill = 'gray90') +
+        geom_col(data = c2$d, aes(x = rownames(c2$d), 
+                                  y = c2$d[,1], 
+                                  color = 'Class Average'), fill = "gray80") +
         geom_line(data = d$d, aes(x = rownames(c2$d), 
                                 y = d$d[,1], 
-                                group = 1), 
-                  color = "red", lwd = 2 ) + 
+                                group = 1, 
+                                color = "You"),  lwd = 2 ) + 
         theme_minimal() + 
         scale_x_discrete(guide = guide_axis(n.dodge=3))+
-        labs(title = "Your Lab Score vs Class Average",
+        labs(title = paste0(tmp," Lab Scores vs Class Average"),
              x = '', 
              y = "Points") + 
-        ylim(c(0,10))
+        scale_color_manual(name="", values=c("transparent","red"), labels = c("Class Average", tmp)) + 
+        ylim(c(0,10)) + 
+        theme(legend.position = 'bottom')
     })
     
     output$table <- renderDT({
